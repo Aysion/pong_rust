@@ -5,13 +5,15 @@ mod draw;
 mod game;
 mod player;
 
+use std::collections::HashSet;
+
 use piston_window::*;
 use piston_window::types::Color;
 
 use crate::game::Game;
 use crate::draw::to_coord_u32;
 
-const BACKGROUND_COLOR: Color = [0.5, 0.5, 0.5, 1.0];
+const BACKGROUND_COLOR: Color = [0.01, 0.01, 0.01, 1.0];
 
 fn main() {
 	let (width, height) = (61, 31);
@@ -21,10 +23,17 @@ fn main() {
 		.unwrap();
 
 	let mut game = Game::new(width, height);
+	let mut pressed_keys = HashSet::new();
 
 	while let Some(e) = window.next() {
 		if let Some(Button::Keyboard(key)) = e.press_args() {
+			pressed_keys.insert(key);
 			game.key_pressed(key);
+		}
+
+		if let Some(Button::Keyboard(key)) = e.release_args() {
+			pressed_keys.remove(&key);
+			game.key_pressed(Key::Unknown);
 		}
 
 		window.draw_2d(&e, |c, g, _| {
@@ -34,6 +43,10 @@ fn main() {
 
 		e.update(|args| {
 			game.update(args.dt);
+
+			for key in &pressed_keys {
+				game.key_pressed(*key);
+			}
 		});
 	}
 }

@@ -6,7 +6,7 @@ use rand::{thread_rng, Rng};
 use crate::draw::{ draw_rectangle, draw_dashed_line };
 use crate::player::{ Player, Direction };
 
-const BORDER_COLOR: Color = [1.0, 1.0, 1.0, 1.0];
+const BORDER_COLOR: Color = [0.3, 0.3, 0.3, 1.0];
 const GAMEOVER_COLOR: Color = [0.8, 0.0, 0.0, 0.5];
 
 const MOVING_PERIOD: f64 = 0.1;
@@ -28,8 +28,8 @@ impl Game {
 			height,
 			game_over: false,
 			wait_time: 0.0,
-			player1: Player::new(1, height / 2),
-			player2: Player::new(width - 2, height / 2),
+			player1: Player::new(1, height / 2 - 2, height, 0.01 as f32),
+			player2: Player::new(width - 2, height / 2 - 2, height, 0.6 as f32),
 		}
 	}
 
@@ -60,9 +60,10 @@ impl Game {
 		}
 
 		if self.wait_time > MOVING_PERIOD {
-			self.update_player();
 			self.wait_time = 0.0;
 		}
+
+		self.player1.update(delta_time);
 	}
 
 	pub fn restart(&mut self) {
@@ -78,12 +79,9 @@ impl Game {
 		let new_dir = match key {
 			Key::Up => Some(Direction::Up),
 			Key::Down => Some(Direction::Down),
-			_ => None,
+			_ => Some(Direction::None),
 		};
-	}
 
-	fn update_player(&mut self) {
-		self.player1.update();
-		self.player2.update();
+		self.player1.change_direction(new_dir.unwrap());
 	}
 }
