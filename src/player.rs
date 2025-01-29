@@ -72,7 +72,5 @@ impl Player {
 				self.y += 1;
 			}
 		}
-
-		println!("Player: {:?} - {:?}", d, (self.x, self.y, self.height));
 	}
 }

@@ -11,7 +11,7 @@ const BORDER_COLOR: Color = [0.3, 0.3, 0.3, 1.0];
 const GAMEOVER_COLOR: Color = [0.8, 0.0, 0.0, 0.1];
 
 const MOVING_PERIOD: f64 = 0.1;
-const RESTART_TIME: f64 = 5.0;
+const RESTART_TIME: f64 = 1.5;
 
 pub struct Game {
 	width: i32,
@@ -78,8 +78,8 @@ impl Game {
 			BallDirection::Left => {
 				if self.ball.hit_player(self.player1.x, self.player1.y, self.player1.height) {
 					match self.player1.direction {
-						Direction::Up => self.ball.y_speed += if self.ball.y_speed > 0 { if self.ball.y_speed == -1 { 2 } else { 1 } } else { if self.ball.y_speed == 1 { -2 } else { -1 } },
-						Direction::Down => self.ball.y_speed += if self.ball.y_speed > 0 { if self.ball.y_speed == -1 { -2 } else { -1 } } else { if self.ball.y_speed == 1 { 2 } else { 1 } },
+						Direction::Up => self.ball.y_speed += if self.ball.y_speed > 0 { if self.ball.y_speed == 1 { 0 } else { -1 } } else { -1 },
+						Direction::Down => self.ball.y_speed += if self.ball.y_speed > 0 { 1 } else { if self.ball.y_speed == -1 { 0 } else { 1 } },
 						_ => (),
 					}
 
@@ -89,8 +89,8 @@ impl Game {
 			BallDirection::Right => {
 				if self.ball.hit_player(self.player2.x, self.player2.y, self.player2.height) {
 					match self.player2.direction {
-						Direction::Up => self.ball.y_speed += if self.ball.y_speed > 0 { if self.ball.y_speed == -1 { 2 } else { 1 } } else { if self.ball.y_speed == 1 { -2 } else { -1 } },
-						Direction::Down => self.ball.y_speed += if self.ball.y_speed > 0 { if self.ball.y_speed == -1 { -2 } else { -1 } } else { if self.ball.y_speed == 1 { 2 } else { 1 } },
+						Direction::Up => self.ball.y_speed += if self.ball.y_speed > 0 { if self.ball.y_speed == 1 { 0 } else { -1 } } else { -1 },
+						Direction::Down => self.ball.y_speed += if self.ball.y_speed > 0 { 1 } else { if self.ball.y_speed == -1 { 0 } else { 1 } },
 						_ => (),
 					}
 					self.ball.change_direction();
