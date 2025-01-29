@@ -13,7 +13,7 @@ pub enum Direction {
 }
 
 pub struct Player {
-	direction: Direction,
+	pub direction: Direction,
 	pub x: i32,
 	pub y: i32,
 	pub height: i32,

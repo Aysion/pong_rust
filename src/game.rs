@@ -77,11 +77,22 @@ impl Game {
 		match self.ball.direction {
 			BallDirection::Left => {
 				if self.ball.hit_player(self.player1.x, self.player1.y, self.player1.height) {
+					match self.player1.direction {
+						Direction::Up => self.ball.y_speed += if self.ball.y_speed > 0 { if self.ball.y_speed == -1 { 2 } else { 1 } } else { if self.ball.y_speed == 1 { -2 } else { -1 } },
+						Direction::Down => self.ball.y_speed += if self.ball.y_speed > 0 { if self.ball.y_speed == -1 { -2 } else { -1 } } else { if self.ball.y_speed == 1 { 2 } else { 1 } },
+						_ => (),
+					}
+
 					self.ball.change_direction();
 				}
 			},
 			BallDirection::Right => {
 				if self.ball.hit_player(self.player2.x, self.player2.y, self.player2.height) {
+					match self.player2.direction {
+						Direction::Up => self.ball.y_speed += if self.ball.y_speed > 0 { if self.ball.y_speed == -1 { 2 } else { 1 } } else { if self.ball.y_speed == 1 { -2 } else { -1 } },
+						Direction::Down => self.ball.y_speed += if self.ball.y_speed > 0 { if self.ball.y_speed == -1 { -2 } else { -1 } } else { if self.ball.y_speed == 1 { 2 } else { 1 } },
+						_ => (),
+					}
 					self.ball.change_direction();
 				}
 			},
@@ -91,10 +102,6 @@ impl Game {
 			self.game_over = true;
 		}
 
-		// if self.ball.hit_player(self.player2.x, self.player2.y, self.player2.height) {
-		// 	self.ball.change_direction(BallDirection::Left);
-		// }
-
 		self.ball.update(delta_time);
 	}
 
@@ -102,6 +109,8 @@ impl Game {
 		self.game_over = false;
 		self.wait_time = 0.0;
 		self.ball.reset(self.width / 2, self.height / 2, 1, 1);
+		self.player1.change_direction(Direction::None);
+		self.player2.change_direction(Direction::None);
 	}
 
 	pub fn key_pressed(&mut self, key: Key) {

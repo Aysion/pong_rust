@@ -44,8 +44,6 @@ impl Ball {
 	}
 
 	pub fn hit_wall(&mut self, width: i32, height: i32) -> bool {
-		println!("Ball::hit_wall: {:?}", (self.direction, self.x, self.y, width, height));
-
 		if self.x == 1 || self.x == (width - 2) {
 			return true;
 		}
@@ -61,7 +59,7 @@ impl Ball {
 
 	pub fn hit_player(&self, player_x: i32, player_y: i32, player_height: i32) -> bool {
 		if player_x == 1 {
-			return self.x == player_x + 1 && self.y >= player_y && self.y < player_y + player_height;
+			return self.x == player_x + 1 && self.y >= player_y - 1 && self.y < player_y + player_height + 1;
 		}
 
 		self.x == player_x - 1 && self.y >= player_y && self.y < player_y + player_height
@@ -113,11 +111,5 @@ impl Ball {
 		}
 
 		self.y += self.y_speed;
-
-		println!("Ball: {:?}", (self.direction, self.x, self.y));
-	}
-
-	pub fn bounce(&mut self) {
-		self.y_speed = -self.y_speed;
 	}
 }
