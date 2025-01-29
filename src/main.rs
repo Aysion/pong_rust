@@ -4,6 +4,7 @@ extern crate piston_window;
 mod draw;
 mod game;
 mod player;
+mod ball;
 
 use std::collections::HashSet;
 

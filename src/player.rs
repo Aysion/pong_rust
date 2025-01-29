@@ -14,40 +14,37 @@ pub enum Direction {
 
 pub struct Player {
 	direction: Direction,
-	body: Vec<(i32, i32)>,
-	height_window: i32,
+	pub x: i32,
+	pub y: i32,
+	pub height: i32,
 	wait_time: f32,
 	speed: f32,
 }
 
 impl Player {
-	pub fn new(x: i32, y: i32, height_window: i32, speed: f32) -> Player {
-		let mut body: Vec<(i32, i32)> = Vec::new();
-		for i in 0..5 {
-			body.push((x, y + i));
-		}
-
+	pub fn new(x: i32, y: i32, speed: f32) -> Player {
 		Player {
 			direction: Direction::None,
-			body,
-			height_window,
+			x,
+			y,
+			height: 5,
 			speed,
 			wait_time: 0.0,
 		}
 	}
 
 	pub fn draw(&self, con: &Context, g: &mut G2d) {
-		for block in &self.body {
-			draw_block(COLOR, block.0, block.1, con, g);
+		for i in 0..self.height {
+			draw_block(COLOR, self.x, self.y + i, con, g);
 		}
 	}
 
-	pub fn update(&mut self, delta_time: f64) {
+	pub fn update(&mut self, height_window: i32, delta_time: f64) {
 		self.wait_time += delta_time as f32;
 
 		if self.wait_time > self.speed {
 			self.wait_time = 0.0;
-			self.moving_press(self.direction);
+			self.moving_press(self.direction, height_window);
 		}
 	}
 
@@ -55,27 +52,27 @@ impl Player {
 		self.direction = d;
 	}
 
-	pub fn moving_press(&mut self, d: Direction) {
+	pub fn moving_press(&mut self, d: Direction, height_window: i32) {
 		if d == Direction::None {
 			return;
 		}
 
-		let mut new_head = *self.body.first().unwrap();
-
-		match d {
-			Direction::Up => new_head.1 -= 1,
-			Direction::Down => new_head.1 += 1,
-			Direction::None => (),
+		if d == Direction::Up {
+			if self.y == 1 {
+				return;
+			} else {
+				self.y -= 1;
+			}
 		}
 
-		if new_head.1 < 1 || (new_head.1 + self.body.len() as i32) > self.height_window - 1 {
-			return;
+		if d == Direction::Down {
+			if self.y > height_window - self.height - 2 {
+				return;
+			} else {
+				self.y += 1;
+			}
 		}
 
-		for i in 0..self.body.len() {
-			self.body[i].1 = new_head.1 + i as i32;
-		}
-
-		println!("Player: {:?} - {:?}", d, self.body);
+		println!("Player: {:?} - {:?}", d, (self.x, self.y, self.height));
 	}
 }
