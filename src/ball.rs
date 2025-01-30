@@ -1,6 +1,6 @@
 use piston_window::types::Color;
 use piston_window::{ Context, G2d };
-use rand::{thread_rng, Rng};
+use rand::{rng, Rng};
 
 use crate::draw::draw_block;
 use crate::player::{Direction, Player};
@@ -84,8 +84,8 @@ impl Ball {
 	}
 
 	pub fn start_direction(&mut self) {
-		let mut rng = thread_rng();
-		let direction = rng.gen_range(0..2);
+		let mut rng = rng();
+		let direction = rng.random_range(0..2);
 		self.direction = if direction == 0 {
 			BallDirection::Left
 		} else {
