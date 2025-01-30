@@ -3,6 +3,7 @@ use piston_window::{ Context, G2d };
 use rand::{thread_rng, Rng};
 
 use crate::draw::draw_block;
+use crate::player::{Direction, Player};
 
 const COLOR: Color = [0.0, 0.0, 0.3, 1.0];
 
@@ -57,12 +58,22 @@ impl Ball {
 		return false;
 	}
 
-	pub fn hit_player(&self, player_x: i32, player_y: i32, player_height: i32) -> bool {
-		if player_x == 1 {
-				return self.x == player_x + 1 && self.y >= player_y - 1 && self.y <= player_y + player_height;
-		}
+	pub fn hit_player(&mut self, player: &Player) {
+		let hited = if player.x == 1 {
+			self.x == player.x + 1 && self.y >= player.y - 1 && self.y <= player.y + player.height
+		} else {
+			self.x == player.x - 1 && self.y >= player.y - 1 && self.y <= player.y + player.height
+		};
 
-		self.x == player_x - 1 && self.y >= player_y - 1 && self.y <= player_y + player_height
+		if hited {
+			match player.direction {
+				Direction::Up => self.y_speed += if self.y_speed > 0 { if self.y_speed == 1 { 0 } else { -1 } } else { -1 },
+				Direction::Down => self.y_speed += if self.y_speed > 0 { 1 } else { if self.y_speed == -1 { 0 } else { 1 } },
+				_ => (),
+			}
+
+			self.change_direction();
+		}
 	}
 
 	pub fn change_direction(&mut self) {

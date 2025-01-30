@@ -75,27 +75,8 @@ impl Game {
 		self.player2.update(self.height, delta_time);
 
 		match self.ball.direction {
-			BallDirection::Left => {
-				if self.ball.hit_player(self.player1.x, self.player1.y, self.player1.height) {
-					match self.player1.direction {
-						Direction::Up => self.ball.y_speed += if self.ball.y_speed > 0 { if self.ball.y_speed == 1 { 0 } else { -1 } } else { -1 },
-						Direction::Down => self.ball.y_speed += if self.ball.y_speed > 0 { 1 } else { if self.ball.y_speed == -1 { 0 } else { 1 } },
-						_ => (),
-					}
-
-					self.ball.change_direction();
-				}
-			},
-			BallDirection::Right => {
-				if self.ball.hit_player(self.player2.x, self.player2.y, self.player2.height) {
-					match self.player2.direction {
-						Direction::Up => self.ball.y_speed += if self.ball.y_speed > 0 { if self.ball.y_speed == 1 { 0 } else { -1 } } else { -1 },
-						Direction::Down => self.ball.y_speed += if self.ball.y_speed > 0 { 1 } else { if self.ball.y_speed == -1 { 0 } else { 1 } },
-						_ => (),
-					}
-					self.ball.change_direction();
-				}
-			},
+			BallDirection::Left => self.ball.hit_player(&self.player1),
+			BallDirection::Right => self.ball.hit_player(&self.player2),
 		}
 
 		if self.ball.hit_wall(self.width, self.height) {
