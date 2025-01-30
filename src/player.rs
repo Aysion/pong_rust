@@ -48,6 +48,20 @@ impl Player {
 		}
 	}
 
+	pub fn update_ai(&mut self,  height_window: i32, ball_y: i32, delta_time: f64) {
+		self.wait_time += delta_time as f32;
+
+		let target_y = ball_y - (self.height / 2);
+
+		if self.y < target_y {
+			self.change_direction(Direction::Down);
+		} else if self.y > target_y {
+			self.change_direction(Direction::Up);
+		}
+
+		self.update(height_window, delta_time);
+	}
+
 	pub fn change_direction(&mut self, d: Direction) {
 		self.direction = d;
 	}

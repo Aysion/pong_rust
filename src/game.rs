@@ -72,11 +72,17 @@ impl Game {
 		}
 
 		self.player1.update(self.height, delta_time);
-		self.player2.update(self.height, delta_time);
+		// self.player2.update(self.height, delta_time);
 
 		match self.ball.direction {
-			BallDirection::Left => self.ball.hit_player(&self.player1),
-			BallDirection::Right => self.ball.hit_player(&self.player2),
+			BallDirection::Left => {
+				// self.player1.update_ai(self.height, self.ball.y, delta_time);
+				self.ball.hit_player(&self.player1);
+			},
+			BallDirection::Right => {
+				self.player2.update_ai(self.height, self.ball.y, delta_time);
+				self.ball.hit_player(&self.player2);
+			},
 		}
 
 		if self.ball.hit_wall(self.width, self.height) {
