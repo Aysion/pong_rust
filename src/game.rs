@@ -72,14 +72,16 @@ impl Game {
 		}
 
 		self.player1.update(self.height, delta_time);
-		// self.player2.update(self.height, delta_time);
+		self.player2.update(self.height, delta_time);
 
 		match self.ball.direction {
 			BallDirection::Left => {
-				// self.player1.update_ai(self.height, self.ball.y, delta_time);
+				self.player2.change_direction(Direction::None);
+				self.player1.update_ai(self.height, self.ball.y, delta_time);
 				self.ball.hit_player(&self.player1);
 			},
 			BallDirection::Right => {
+				self.player1.change_direction(Direction::None);
 				self.player2.update_ai(self.height, self.ball.y, delta_time);
 				self.ball.hit_player(&self.player2);
 			},
